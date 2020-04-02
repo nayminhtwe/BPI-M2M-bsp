@@ -1,0 +1,58 @@
+menuconfig FS_BLOCK_COMPAT
+	bool "Compatibility settings for fs and block layer"
+	default n
+	help
+	  To provide users with some proprietary features.
+
+config PART_FOR_MSDOS
+	bool "Partition size restrictions lifted for msdos"
+	depends on FS_BLOCK_COMPAT && MSDOS_PARTITION
+	default n
+	help
+	  The function is modified in block layer.
+	  /block/partitions/msdos.c
+	  
+config CLUS_FOR_FAT32
+	bool "Cluster restrictions lifted for fat32"
+	depends on FS_BLOCK_COMPAT && FAT_FS
+	default n
+	help
+	  The function is modified in fs layer.
+	  /fs/fat/inode.c
+	  
+config SYNC_FOR_BLKDEV
+	bool "Ensure write data to device after sync system call"
+	depends on FS_BLOCK_COMPAT && BLOCK
+	default n
+	help
+	  The function is modified in fs layer.
+	  /fs/sync.c
+	  /fs/block_dev.c
+
+config MMAP_FOR_FUSE
+	bool "Providing mmap feature for fuse"
+	depends on FS_BLOCK_COMPAT && FUSE_FS
+	default n
+	help
+	  The function is modified in fs layer.
+	  /fs/fuse/file.c
+	  /fs/fuse/dev.c
+	  /fs/fuse/inode.c
+	  /fs/fuse/fuse_i.h
+
+config FILE_DIRTY_LIMIT
+	bool "Enable file dirty limit to reduce dirty caches"
+	depends on FS_BLOCK_COMPAT
+	default n
+	help
+	  The function is modified in:
+	  include/linux/fs.h
+	  include/linux/writeback.h
+	  include/linux/backing-dev.h
+	  mm/page-writeback.c
+	  mm/backing-dev.c
+	  mm/filemap.c
+	  mm/truncate.c
+	  fs/fs-writeback.c
+	  fs/ext4/inode.c
+	  kernel/sysctl.c
